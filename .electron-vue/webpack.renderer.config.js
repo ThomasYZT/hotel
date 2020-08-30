@@ -1,6 +1,7 @@
 'use strict'
 
 process.env.BABEL_ENV = 'renderer'
+let isProduction = process.env.NODE_ENV === 'production'
 
 const path = require('path')
 const { dependencies } = require('../package.json')
@@ -11,6 +12,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
+const vueLoaderConfig = require('./vue-loader.conf')
+const utils = require('./utils')
 
 /**
  * List of node_modules to include in webpack bundle
@@ -20,6 +23,16 @@ const { VueLoaderPlugin } = require('vue-loader')
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/webpack-configurations.html#white-listing-externals
  */
 let whiteListedModules = ['vue']
+const createLintingRule = () => ({
+  test: /\.(js|vue)$/,
+  loader: 'eslint-loader',
+  enforce: 'pre',
+  exclude: /node_modules/,
+  options: {
+    formatter: require('eslint-friendly-formatter'),
+    emitWarning: !isProduction
+  }
+});
 
 let rendererConfig = {
   devtool: '#cheap-module-eval-source-map',
@@ -31,36 +44,11 @@ let rendererConfig = {
   ],
   module: {
     rules: [
+      ...(isProduction ? [createLintingRule()] : []),
       {
-        test: /\.(js|vue)$/,
-        enforce: 'pre',
-        exclude: /node_modules/,
-        use: {
-          loader: 'eslint-loader',
-          options: {
-            formatter: require('eslint-friendly-formatter')
-          }
-        }
-      },
-      {
-        test: /\.scss$/,
-        use: ['vue-style-loader', 'css-loader', 'sass-loader']
-      },
-      {
-        test: /\.sass$/,
-        use: ['vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax']
-      },
-      {
-        test: /\.less$/,
-        use: ['vue-style-loader', 'css-loader', 'less-loader']
-      },
-      {
-        test: /\.css$/,
-        use: ['vue-style-loader', 'css-loader']
-      },
-      {
-        test: /\.html$/,
-        use: 'vue-html-loader'
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: vueLoaderConfig
       },
       {
         test: /\.js$/,
@@ -68,22 +56,12 @@ let rendererConfig = {
         exclude: /node_modules/
       },
       {
-        test: /\.node$/,
-        use: 'node-loader'
+        test: /\.html$/,
+        use: 'vue-html-loader'
       },
       {
-        test: /\.vue$/,
-        use: {
-          loader: 'vue-loader',
-          options: {
-            extractCSS: process.env.NODE_ENV === 'production',
-            loaders: {
-              sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1',
-              scss: 'vue-style-loader!css-loader!sass-loader',
-              less: 'vue-style-loader!css-loader!less-loader'
-            }
-          }
-        }
+        test: /\.node$/,
+        use: 'node-loader'
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -112,7 +90,8 @@ let rendererConfig = {
             name: 'fonts/[name]--[folder].[ext]'
           }
         }
-      }
+      },
+      ...utils.styleLoaders({ sourceMap: isProduction, usePostCSS: true }),
     ]
   },
   node: {

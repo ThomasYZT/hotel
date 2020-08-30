@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
+  <div class="page">
+    <el-button>yzt</el-button>
   </div>
 </template>
 
@@ -10,6 +10,6 @@ export default {
 };
 </script>
 
-<style>
-  /* CSS */
+<style scoped lang="scss">
+
 </style>
