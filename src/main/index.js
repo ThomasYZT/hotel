@@ -1,56 +1,39 @@
 'use strict';
 
-import { app, BrowserWindow } from 'electron';
-import { registerWindowStateChangeActions } from './winOpt';
+import { app } from 'electron';
+import MainWindow from './windows/main';
+import '../renderer/store'
 
-/**
- * Set `__static` path to static files in production
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
- */
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\');
 }
+const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:9080` : `file://${__dirname}/index.html`;
 
-let mainWindow;
-const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080` :
-  `file://${__dirname}/index.html`;
+const HotelSystem = {
+  init () {
+    this._initApp();
+  },
 
-function createWindow () {
-  /**
-   * Initial window options
-   */
-  mainWindow = new BrowserWindow({
-    height : 563,
-    width : 1000,
-    minimizable : true,
-    center : true,
-    frame : false,
-    autoHideMenuBar : false,
-    titleBarStyle : 'hiddenInset'
-  });
+  _initApp () {
+    app.on('ready', () => {
+      MainWindow.launch(winURL);
+    });
 
-  registerWindowStateChangeActions(mainWindow);
-  mainWindow.loadURL(winURL);
+    app.on('activate', () => {
+      if (MainWindow.checkInstance()) {
+        !MainWindow.isShown && MainWindow.show();
+      } else {
+        MainWindow.launch(winURL);
+      }
+    });
 
-  mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
-}
-
-app.on('ready', createWindow);
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
+    app.on('window-all-closed', () => {
+      app.quit();
+    });
   }
-});
+};
 
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
+HotelSystem.init();
 
 /**
  * Auto Updater

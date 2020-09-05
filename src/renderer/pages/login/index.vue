@@ -16,35 +16,32 @@
                           :rules="loginFormRule" :label-width="40" label-position="left">
                     <div class="form-item-wrapper">
                       <FormItem label="账号" prop="accountName">
-                        <i-input size="small" type="text" placeholder="用户名" v-model="loginFormData.accountName"></i-input>
+                        <i-input size="small" type="text" placeholder="用户名" v-model="loginFormData.accountName" />
                       </FormItem>
                       <FormItem label="密码" prop="pwd">
-                        <i-input size="small" type="password" :password="true" placeholder v-model="loginFormData.pwd"></i-input>
+                        <i-input size="small" type="password" :password="true" placeholder="密码" v-model="loginFormData.pwd" />
                       </FormItem>
                     </div>
                     <div class="login-tool">
                       <el-checkbox>记住密码</el-checkbox>
                       <span class="forgot">忘记密码?</span>
                     </div>
-                    <i-button type="primary" class="login-btn" @click="handleSubmit('loginForm')">登 陆</i-button>
+                    <i-button type="primary" class="submit-btn" @click="handleSubmit('loginForm')">登 陆</i-button>
                   </i-form>
                 </div>
               </TabPane>
               <TabPane label="注 册" name="name2">
                 <div class="register-box">
-                  <i-form ref="loginForm"
-                          :model="loginFormData"
-                          :rules="loginFormRule" :label-width="40" label-position="left">
+                  <i-form ref="registForm"
+                          :model="registFormData"
+                          :rules="registFormRule" :label-width="40" label-position="left">
                     <FormItem label="账号" prop="passwd">
-                      <i-input size="small" type="password" v-model="loginFormData.passwd"></i-input>
+                      <i-input size="small" type="text" placeholder="用户名" v-model="registFormData.accountName" />
                     </FormItem>
                     <FormItem label="密码" prop="passwdCheck">
-                      <i-input size="small" type="password" v-model="loginFormData.passwdCheck"></i-input>
+                      <i-input size="small" type="password" :password="true" placeholder="密码" v-model="registFormData.pwd" />
                     </FormItem>
-                    <FormItem>
-                      <i-button type="primary" @click="handleSubmit('loginForm')">Submit</i-button>
-                      <i-button @click="handleReset('loginForm')" style="margin-left: 8px">Reset</i-button>
-                    </FormItem>
+                    <i-button type="primary" class="submit-btn" @click="handleSubmit('registForm')">注 册</i-button>
                   </i-form>
                 </div>
               </TabPane>
@@ -70,14 +67,18 @@ export default {
       },
       loginFormRule : {
 
+      },
+      registFormRule : {
+        accountName : '',
+        pwd : ''
+      },
+      registFormData : {
+
       }
     };
   },
   methods : {
     handleSubmit (formName) {
-
-    },
-    handleReset (formName) {
 
     }
   }
@@ -121,6 +122,7 @@ export default {
       width: 100%;
       height: 100%;
       .login-box {
+        position: relative;
         height: 100%;
         width: 100%;
 
@@ -133,16 +135,19 @@ export default {
             cursor: pointer;
           }
         }
-
-        .login-btn {
-          width: 100%;
-          border-radius: unset;
-        }
       }
 
       .register-box {
+        position: relative;
         height: 100%;
         width: 100%;
+      }
+
+      .submit-btn {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        border-radius: unset;
       }
     }
   }

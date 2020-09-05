@@ -5,6 +5,7 @@ import router from './router';
 import store from './store';
 import channels from './assets/plugins/channels';
 import globalUtils from './assets/plugins/globalUtils';
+import { listenToWindowStateChange } from '../common/channels';
 import './assets/styles/font/iconfont.css';
 import 'normalize.css/normalize.css'; // 全局默认样式
 import elementUI from './assets/plugins/elementUI';
@@ -25,4 +26,8 @@ new Vue({
   router,
   store,
   render : h => h(App)
+});
+
+listenToWindowStateChange((event, state) => {
+  store.dispatch('setWindowState', state);
 });

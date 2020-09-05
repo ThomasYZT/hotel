@@ -1,4 +1,4 @@
-import { windowActionSync } from '../../../main/winOpt';
+import { windowActionSync } from '../../../common/channels';
 
 export default {
   install : (Vue) => {
@@ -15,5 +15,17 @@ const actions = {
   },
   maximize () {
     windowActionSync.maximize();
+  },
+  unmaximize () {
+    windowActionSync.unmaximize();
+  },
+  fullscreen () {
+    windowActionSync.fullscreen();
+  },
+  exitfullscreen () {
+    windowActionSync.exitfullscreen();
+  },
+  restore () {
+    windowActionSync.restore();
   }
 };

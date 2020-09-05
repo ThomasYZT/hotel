@@ -1,22 +1,29 @@
 <template>
   <div class="frame-header">
-    <template v-if="$is.windows()">
-      <div class="title">title</div>
-      <div  class="bar-wrapper">
-        <win-bar></win-bar>
-      </div>
-    </template>
-    <template v-else>
-
-    </template>
+    <div class="title-bar">
+      <img class="logo" src="../../assets/img/logo.png" alt="">
+      <span class="title">uu智慧酒店管理系统（××酒店）</span>
+    </div>
+    <div class="tool-bar">
+      <win-bar></win-bar>
+    </div>
   </div>
 </template>
 
 <script>
 import WinBar from '../WinBar';
+import { mapGetters } from 'vuex';
 export default {
   components : {
     WinBar
+  },
+  computed : {
+    ...mapGetters([
+      'windowState'
+    ])
+  },
+  mounted () {
+
   }
 };
 </script>
@@ -24,16 +31,29 @@ export default {
 <style scoped lang="scss">
 @import "~@/assets/styles/scss/base";
 .frame-header {
-  -webkit-app-region: drag;
   @include flex_layout(row, space-between, center);
+  padding: 0 10px 0 20px;
   height: 38px;
   background-color: $lightGreen;
-  .title {
+  -webkit-app-region: drag;
+
+  .title-bar {
+    @include flex_layout(row, flex-start, center);
     height: 100%;
+    .logo {
+      width: 23px;
+      height: 23px;
+    }
+
+    .title {
+      margin-left: 5px;
+      color: $color_000;
+      font-size: $font-size-mormal;
+      font-weight: bold;
+    }
   }
-  .bar-wrapper {
+  .tool-bar {
     height: 100%;
-    margin-right: 20px;
   }
 }
 </style>

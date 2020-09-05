@@ -30,7 +30,6 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(to, from, 111);
   next();
   if (to.meta.noPermission) {
     next();
