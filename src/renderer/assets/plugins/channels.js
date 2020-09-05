@@ -1,19 +1,19 @@
-import { ipcRenderer } from 'electron';
+import { windowActionSync } from '../../../main/winOpt';
 
 export default {
   install : (Vue) => {
-    Vue.prototype.$win = channels;
+    Vue.prototype.$win = actions;
   }
 };
 
-const channels = {
+const actions = {
   close () {
-    ipcRenderer.send('close');
+    windowActionSync.close();
   },
   minimize () {
-    ipcRenderer.send('minimize');
+    windowActionSync.minimize();
   },
   maximize () {
-    ipcRenderer.send('maximize');
+    windowActionSync.maximize();
   }
 };

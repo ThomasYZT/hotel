@@ -1,7 +1,7 @@
 'use strict';
 
 import { app, BrowserWindow } from 'electron';
-import { channelsInit } from './channels';
+import { registerWindowStateChangeActions } from './winOpt';
 
 /**
  * Set `__static` path to static files in production
@@ -21,14 +21,16 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    useContentSize : false,
     height : 563,
     width : 1000,
-    frame : false
+    minimizable : true,
+    center : true,
+    frame : false,
+    autoHideMenuBar : false,
+    titleBarStyle : 'hiddenInset'
   });
-  
-  channelsInit(mainWindow);
 
+  registerWindowStateChangeActions(mainWindow);
   mainWindow.loadURL(winURL);
 
   mainWindow.on('closed', () => {

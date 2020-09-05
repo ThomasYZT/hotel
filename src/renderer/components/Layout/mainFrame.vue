@@ -65,7 +65,7 @@ export default {
   .frame-content {
     @include flex_layout(row, center, center);
     position: relative;
-    height: calc(100% - 33px);
+    height: calc(100% - 38px);
     width: 100%;
 
     >>> .frame-aside {

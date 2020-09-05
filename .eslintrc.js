@@ -78,9 +78,11 @@ module.exports = {
       "allowShortCircuit" : true,
       "allowTernary" : true
     }], // 禁止无用的表达式
-    "valid-jsdoc" : [1, {
+    "valid-jsdoc" : [0, {
       "requireParamDescription" : false, // 允许在参数标签中缺少描述
-      "requireReturnDescription" : false // 允许在返回标签中缺少描述
+      "requireReturnDescription" : false, // 允许在返回标签中缺少描述
+      "requireReturnType" : false,
+      "requireReturn": false
     }],// jsdoc规则配置
     "no-warning-comments" : [1, {
       "terms" : ["todo", "fixme", "any other term"],
