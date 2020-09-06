@@ -1,3 +1,6 @@
+import Vue from 'vue';
+import debounce from 'lodash/debounce';
+
 const state = {
   loading : false,
   windowState : 'normal'
@@ -33,7 +36,10 @@ const actions = {
   },
   setWindowState ({ commit }, val) {
     commit('UPDATE_WINDOW_STATE', val);
-  }
+  },
+  showMessage : debounce((store, { type, msg }) => {
+    Vue.prototype.$Message[type](msg);
+  }, 500),
 };
 
 export default {

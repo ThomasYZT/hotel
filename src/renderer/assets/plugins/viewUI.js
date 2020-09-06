@@ -7,7 +7,8 @@ import {
   FormItem,
   Input,
   Button,
-  Checkbox
+  Checkbox,
+  Message
 } from 'view-design';
 // 自定义element-ui主题
 import '../../assets/styles/theme/viewUITheme/index.less';
@@ -23,5 +24,12 @@ export default {
     Vue.component('iInput', Input);
     Vue.component('iButton', Button);
     Vue.component('iCheckbox', Checkbox);
+    Vue.component('Message', Message);
+    Vue.prototype.$Message = Message;
+    
+    Message.config({
+      top : 70,
+      duration : 2
+    });
   }
 };

@@ -8,41 +8,49 @@
         </div>
         <div class="auth-box">
           <div class="tab-wrapper">
-            <Tabs value="name1">
-              <TabPane label="登 陆" name="name1">
+            <Tabs value="login">
+              <TabPane label="登 陆" name="login" :disabled="isLoading">
                 <div class="login-box">
                   <i-form ref="loginForm"
+                          :disabled="isLoading"
                           :model="loginFormData"
-                          :rules="loginFormRule" :label-width="40" label-position="left">
+                          :rules="loginFormRule"
+                          :label-width="60"
+                          label-position="left">
                     <div class="form-item-wrapper">
                       <FormItem label="账号" prop="accountName">
-                        <i-input size="small" type="text" placeholder="用户名" v-model="loginFormData.accountName" />
+                        <i-input size="small" type="text" placeholder="用户名" maxlength="20" v-model="loginFormData.accountName" />
                       </FormItem>
                       <FormItem label="密码" prop="pwd">
                         <i-input size="small" type="password" :password="true" placeholder="密码" v-model="loginFormData.pwd" />
                       </FormItem>
                     </div>
                     <div class="login-tool">
-                      <el-checkbox>记住密码</el-checkbox>
+                      <el-checkbox :disabled="isLoading">记住密码</el-checkbox>
                       <span class="forgot">忘记密码?</span>
                     </div>
-                    <i-button type="primary" class="submit-btn" @click="handleSubmit('loginForm')">登 陆</i-button>
                   </i-form>
+                  <i-button :loading="isLoading" type="primary" class="submit-btn"
+                            @click="handleSubmit('loginForm')">登 陆</i-button>
                 </div>
               </TabPane>
-              <TabPane label="注 册" name="name2">
+              <TabPane label="注 册" name="register" :disabled="isLoading">
                 <div class="register-box">
                   <i-form ref="registForm"
+                          :disabled="isLoading"
                           :model="registFormData"
-                          :rules="registFormRule" :label-width="40" label-position="left">
-                    <FormItem label="账号" prop="passwd">
-                      <i-input size="small" type="text" placeholder="用户名" v-model="registFormData.accountName" />
+                          :rules="registFormRule"
+                          :label-width="60"
+                          label-position="left">
+                    <FormItem label="账号" prop="accountName">
+                      <i-input size="small" type="text" placeholder="用户名" maxlength="20" v-model="registFormData.accountName" />
                     </FormItem>
-                    <FormItem label="密码" prop="passwdCheck">
+                    <FormItem label="密码" prop="pwd">
                       <i-input size="small" type="password" :password="true" placeholder="密码" v-model="registFormData.pwd" />
                     </FormItem>
-                    <i-button type="primary" class="submit-btn" @click="handleSubmit('registForm')">注 册</i-button>
                   </i-form>
+                  <i-button :loading="isLoading" type="primary" class="submit-btn"
+                            @click="handleSubmit('registForm')">注 册</i-button>
                 </div>
               </TabPane>
             </Tabs>
@@ -55,31 +63,119 @@
 
 <script>
 import mainFrame from '../../components/Layout/mainFrame';
+import ajax from '../../assets/api';
+import { mapActions } from 'vuex';
 export default {
   components : {
     mainFrame
   },
   data () {
     return {
+      isLoading : false,
       loginFormData : {
         accountName : '',
         pwd : ''
       },
       loginFormRule : {
-
+        accountName : [
+          { required : true, message : '账户不能为空', trigger : 'blur' },
+          { type : 'string', max : 20, message : '账户不能超过20个字', trigger : 'blur' }
+        ],
+        pwd : [
+          { required : true, message : '密码不能为空', trigger : 'blur' }
+        ]
       },
-      registFormRule : {
+      registFormData : {
         accountName : '',
         pwd : ''
       },
-      registFormData : {
-
-      }
+      registFormRule : {
+        accountName : [
+          { required : true, message : '账户不能为空', trigger : 'blur' },
+          { type : 'string', max : 20, message : '账户不能超过20个字', trigger : 'blur' }
+        ],
+        pwd : [
+          { required : true, message : '密码不能为空', trigger : 'blur' }
+        ]
+      },
     };
   },
-  methods : {
-    handleSubmit (formName) {
+  /*created () {
 
+    let getPermission = (data) => new Promise((resolve, reject) => {
+      resolve(data);
+      // reject('getPermissionError');
+    });
+
+    let generateRoute = (data) => new Promise((resolve, reject) => {
+      resolve(data);
+      // reject('generateRouteError');
+    });
+
+    let getOrgs = (data) => new Promise((resolve, reject) => {
+      resolve(generateRoute(data));
+      // reject('getOrgsError');
+    });
+
+    let login = () => new Promise((resolve, reject) => {
+      resolve(getPermission(1));
+      // reject('loginError');
+    }).then(data => {
+      return getOrgs(data);
+    });
+
+    login().then(data => {
+      console.log(data, 'sucess');
+    }).catch(err => {
+      console.log(err, 'error');
+    });
+  },*/
+  methods : {
+    ...mapActions([
+      'setUserInfo'
+    ]),
+    handleSubmit (formName) {
+      this.$Message.success('hahahahahahaha');
+      this.isLoading = true;
+      this.formValidate(formName);
+    },
+
+    formValidate (formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.formSubmit(formName);
+        } else {
+          this.isLoading = false;
+        }
+      });
+    },
+
+    formSubmit (formName) {
+      if (formName === 'loginForm') {
+        setTimeout(() => {
+          this.setUserInfo({
+            accountName : '123',
+            pwd : '123'
+          });
+          this.isLoading = false;
+        }, 1000);
+        /*ajax.post('').then(res => {
+
+        }).catch(() => {
+
+        }).finally(() => {
+
+          this.isLoading = false;
+        });*/
+      } else if (formName === 'registForm') {
+        ajax.post('').then(res => {
+
+        }).catch(() => {
+
+        }).finally(() => {
+          this.isLoading = false;
+        });
+      }
     }
   }
 };

@@ -12,9 +12,10 @@ export const nvllRouterAuth = (to) => {
   }
 };
 
-export const permissionInfoParse = (permissionInfo) => {
-  let _routes = [];
-  // while () {
-  //
-  // }
+export const generateRoutes = (orgInfo) => {
+
+};
+
+export const goRoute = (routerInfo) => {
+
 };
