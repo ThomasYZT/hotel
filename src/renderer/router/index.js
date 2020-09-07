@@ -44,7 +44,7 @@ const createRouter = () => new Router({
   ]
 });
 
-const router = createRouter();
+let router = createRouter();
 
 export const resetRouter = (routes) => {
   const newRouter = createRouter();
@@ -53,7 +53,6 @@ export const resetRouter = (routes) => {
 };
 
 router.beforeEach((to, from, next) => {
-  next();
   if (to.meta.needPermission) {
     let userInfo = store.getters.userInfo;
     if (userInfo) {
