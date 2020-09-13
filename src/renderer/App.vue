@@ -2,9 +2,11 @@
   <div id="app">
     <router-view v-if="noFrame"/>
     <mainFrame v-else>
-      <transition name="el-fade-in">
-        <router-view slot="router"></router-view>
-      </transition>
+      <template slot="router">
+        <transition name="el-fade-in">
+          <router-view></router-view>
+        </transition>
+      </template>
     </mainFrame>
   </div>
 </template>

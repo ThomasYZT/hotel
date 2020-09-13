@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import store from '../store';
 import { nvllRouterAuth } from './routeUtils';
-
+import modules from './module';
 Vue.use(Router);
 
 const createRouter = () => new Router({
@@ -37,6 +37,7 @@ const createRouter = () => new Router({
       },
       component : () => import('../pages/noService/index')
     },
+    ...modules,
     {
       path : '*',
       component : () => import('../pages/404/index')

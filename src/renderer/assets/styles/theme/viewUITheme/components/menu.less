@@ -1,0 +1,105 @@
+@import "~view-design/src/styles/components/menu";
+@import "../common/custom";
+.@{menu-prefix-cls} {
+  color: #FFFFFF;
+
+  &-item{
+    display: block;
+    outline: none;
+    list-style: none;
+    font-size: @font-size-base;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    transition: all @transition-time @ease-in-out;
+  }
+
+  &-vertical{
+    &.@{menu-prefix-cls}-light{
+      &:after{
+        content: '';
+        display: block;
+        width: 1px;
+        height: 100%;
+        background: transparent;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 1;
+      }
+    }
+  }
+
+  &-light{
+    background: @normal-green;
+  }
+
+  // vertical
+  &-vertical &-item,
+  &-vertical &-submenu-title
+  {
+    padding: 14px 24px;
+    position: relative;
+    cursor: pointer;
+    z-index: 1;
+    transition: all @transition-time @ease-in-out;
+
+    &:hover{
+      //background: @background-color-select-hover;
+      color: @dark-green;
+      background: @light-green;
+    }
+  }
+
+  &-vertical &-submenu-title-icon{
+    // #5592 支持自定义图标 size 后，换一种位置
+    //float: right;
+    //position: relative;
+    //top: 4px;
+    position: absolute;
+    top: 50%;
+    right: 24px;
+    transform: translateY(-50%);
+  }
+  &-submenu-title-icon {
+    transition: transform @transition-time @ease-in-out;
+  }
+  &-horizontal &-opened > * > &-submenu-title-icon{
+    transform: rotate(180deg);
+  }
+  &-vertical &-opened > * > &-submenu-title-icon{
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  &-vertical &-submenu{
+    &-nested{
+      padding-left: 20px;
+    }
+    .@{menu-prefix-cls}-item{
+      padding-left: 43px;
+    }
+  }
+
+  &-light&-vertical &-item{
+    width: 100%;
+    //border-right: 2px solid transparent;
+    &-active:not(.@{menu-prefix-cls}-submenu){
+      color: @dark-green;
+      background: ~`colorPalette("@{light-green}", 1)`;
+      //border-right: 2px solid @primary-color;
+      z-index: 2;
+      &:after{
+        content: '';
+        display: block;
+        width: 2px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        background: @dark-green;
+      }
+    }
+  }
+}

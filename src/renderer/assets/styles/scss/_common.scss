@@ -5,8 +5,17 @@ html,body{
   font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,Helvetica,Roboto,Arial,PingFang SC,Hiragino Sans GB,Microsoft Yahei,Microsoft Jhenghei,sans-serif !important;
 }
 
-.page {
+.page-container {
   height: 100%;
   width: 100%;
 }
 
+::-webkit-scrollbar {
+  z-index: 11;
+  width: 2px;
+  &-thumb {
+    border-radius: 5px;
+    width: 2px;
+    background: rgba(0,0,0, .3);
+  }
+}

@@ -1,6 +1,6 @@
 <template>
   <div class="frame-main">
-    <slot></slot>
+    <slot>1231212312</slot>
   </div>
 </template>
 
@@ -12,6 +12,7 @@ export default {
 
 <style scoped lang="scss">
 .frame-main {
-
+  width: 100%;
+  height: 100%;
 }
 </style>

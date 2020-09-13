@@ -69,6 +69,7 @@ export default {
     width: 100%;
 
     >>> .frame-aside {
+      height: calc(100% - 38px);
       flex: 1 0;
     }
 

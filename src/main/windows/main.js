@@ -15,6 +15,8 @@ export default {
     this.window = new BrowserWindow({
       height : 563,
       width : 1000,
+      minHeight : 563,
+      minWidth : 1000,
       minimizable : true,
       center : true,
       frame : false,

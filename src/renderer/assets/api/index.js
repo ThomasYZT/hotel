@@ -4,11 +4,11 @@ import qs from 'querystring';
 import defautsDeep from 'lodash/defaultsdeep';
 import store from '../../store';
 
+const domain = 'http://139.155.42.50:8080';
 //创建自定义axios实例
 let instance = axios.create({
   baseURL : '',
   timeout : 240000, // 设置4分钟超时时间
-  //code 0 -- 正常， 1 -- 逻辑异常， -1 -- 捕获异常
   validateStatus : function (status) {
     return status < 500;
   },
@@ -31,7 +31,7 @@ instance.interceptors.response.use((res) => {
 export default {
   //post请求
   post (apiKey, params, config = null, withRequiredParams = true, loading = true) {
-    if (loading) store.actions.loading();
+    loading && store.dispatch('loading');
 
     let myConfig = {
       params : {}
@@ -54,17 +54,21 @@ export default {
             (myConfig.headers['content-type'].includes('application/json') ||
                 myConfig.headers['content-type'].includes('multipart/form-data')));
 
-    return instance.post(apiList[apiKey], needStringify ? qs.stringify(params) : params, myConfig).then(res => {
-      return res;
+    return instance.post(`${domain}${apiList[apiKey]}`, needStringify ? qs.stringify(params) : params, myConfig).then(res => {
+      if (res.code === 1) {
+        return res;
+      } else {
+        return Promise.reject(res);
+      }
     }).catch(err => {
-      return err;
+      return Promise.reject(err);
     }).finally(() => {
-      store.actions.unloading();
+      loading && store.dispatch('unloading');
     });
   },
   //get请求
   get (apiKey, params, config = null, withRequiredParams = true, loading = true) {
-    if (loading) store.actions.loading();
+    loading && store.dispatch('loading');
     let myConfig = {
       params : {}
     };
@@ -84,12 +88,16 @@ export default {
       Object.assign(myConfig, config);
     }
 
-    return instance.get(`${apiList[apiKey]}`, myConfig).then(res => {
-      return res;
+    return instance.get(`${domain}${apiList[apiKey]}`, myConfig).then(res => {
+      if (res.code === 1) {
+        return res;
+      } else {
+        return Promise.reject(res);
+      }
     }).catch(err => {
-      return err;
+      return Promise.reject(err);
     }).finally(() => {
-      store.actions.unloading();
+      loading && store.dispatch('unloading');
     });
   },
 };

@@ -18,11 +18,11 @@
                           :label-width="60"
                           label-position="left">
                     <div class="form-item-wrapper">
-                      <FormItem label="账号" prop="accountName">
-                        <i-input size="small" type="text" placeholder="用户名" maxlength="20" v-model="loginFormData.accountName" />
+                      <FormItem label="账号" prop="userName">
+                        <i-input size="small" type="text" placeholder="用户名" maxlength="20" v-model="loginFormData.userName" />
                       </FormItem>
-                      <FormItem label="密码" prop="pwd">
-                        <i-input size="small" type="password" :password="true" placeholder="密码" v-model="loginFormData.pwd" />
+                      <FormItem label="密码" prop="password">
+                        <i-input size="small" type="password" :password="true" placeholder="密码" v-model="loginFormData.password" />
                       </FormItem>
                     </div>
                     <div class="login-tool">
@@ -42,11 +42,11 @@
                           :rules="registFormRule"
                           :label-width="60"
                           label-position="left">
-                    <FormItem label="账号" prop="accountName">
-                      <i-input size="small" type="text" placeholder="用户名" maxlength="20" v-model="registFormData.accountName" />
+                    <FormItem label="账号" prop="userName">
+                      <i-input size="small" type="text" placeholder="用户名" maxlength="20" v-model="registFormData.userName" />
                     </FormItem>
-                    <FormItem label="密码" prop="pwd">
-                      <i-input size="small" type="password" :password="true" placeholder="密码" v-model="registFormData.pwd" />
+                    <FormItem label="密码" prop="password">
+                      <i-input size="small" type="password" :password="true" placeholder="密码" v-model="registFormData.password" />
                     </FormItem>
                   </i-form>
                   <i-button :loading="isLoading" type="primary" class="submit-btn"
@@ -73,28 +73,28 @@ export default {
     return {
       isLoading : false,
       loginFormData : {
-        accountName : '',
-        pwd : ''
+        userName : '',
+        password : ''
       },
       loginFormRule : {
-        accountName : [
+        userName : [
           { required : true, message : '账户不能为空', trigger : 'blur' },
           { type : 'string', max : 20, message : '账户不能超过20个字', trigger : 'blur' }
         ],
-        pwd : [
+        password : [
           { required : true, message : '密码不能为空', trigger : 'blur' }
         ]
       },
       registFormData : {
-        accountName : '',
-        pwd : ''
+        userName : '',
+        password : ''
       },
       registFormRule : {
-        accountName : [
+        userName : [
           { required : true, message : '账户不能为空', trigger : 'blur' },
           { type : 'string', max : 20, message : '账户不能超过20个字', trigger : 'blur' }
         ],
-        pwd : [
+        password : [
           { required : true, message : '密码不能为空', trigger : 'blur' }
         ]
       },
@@ -132,11 +132,13 @@ export default {
   },*/
   methods : {
     ...mapActions([
-      'setUserInfo'
+      'login',
     ]),
     handleSubmit (formName) {
-      this.$Message.success('hahahahahahaha');
       this.isLoading = true;
+      // this.$router.push({
+      //   name : 'menuList'
+      // })
       this.formValidate(formName);
     },
 
@@ -149,24 +151,22 @@ export default {
         }
       });
     },
-
     formSubmit (formName) {
       if (formName === 'loginForm') {
-        setTimeout(() => {
-          this.setUserInfo({
-            accountName : '123',
-            pwd : '123'
-          });
-          this.isLoading = false;
-        }, 1000);
-        /*ajax.post('').then(res => {
-
-        }).catch(() => {
-
+        this.login({
+          tip : false,
+          ...this.loginFormData
+        }).then(() => {
+          this.$Message.success('登录成功');
+        }).catch(({ err, type }) => {
+          if (type === 'loginError') {
+            this.$Message.error(`登录失败：${err.msg || JSON.stringify(err)}`);
+          } else if (type === 'permissionError') {
+            this.$Message.error(`获取权限失败：${err.msg || JSON.stringify(err)}`);
+          }
         }).finally(() => {
-
           this.isLoading = false;
-        });*/
+        });
       } else if (formName === 'registForm') {
         ajax.post('').then(res => {
 
