@@ -11,8 +11,8 @@ const Multispinner = require('multispinner')
 
 
 const mainConfig = require('./webpack.main.config')
-const rendererConfig = require('./webpack.renderer.config')
-const webConfig = require('./webpack.web.config')
+// const rendererConfig = require('./webpack.renderer.config')
+// const webConfig = require('./webpack.web.config')
 
 const doneLog = chalk.bgGreen.white(' DONE ') + ' '
 const errorLog = chalk.bgRed.white(' ERROR ') + ' '
@@ -20,7 +20,7 @@ const okayLog = chalk.bgBlue.white(' OKAY ') + ' '
 const isCI = process.env.CI || false
 
 if (process.env.BUILD_TARGET === 'clean') clean()
-else if (process.env.BUILD_TARGET === 'web') web()
+// else if (process.env.BUILD_TARGET === 'web') web()
 else build()
 
 function clean () {
@@ -34,7 +34,7 @@ function build () {
 
   del.sync(['dist/electron/*', '!.gitkeep'])
 
-  const tasks = ['main', 'renderer']
+  const tasks = ['main'/*, 'renderer'*/]
   const m = new Multispinner(tasks, {
     preText: 'building',
     postText: 'process'
@@ -59,15 +59,15 @@ function build () {
     process.exit(1)
   })
 
-  pack(rendererConfig).then(result => {
-    results += result + '\n\n'
-    m.success('renderer')
-  }).catch(err => {
-    m.error('renderer')
-    console.log(`\n  ${errorLog}failed to build renderer process`)
-    console.error(`\n${err}\n`)
-    process.exit(1)
-  })
+  // pack(rendererConfig).then(result => {
+  //   results += result + '\n\n'
+  //   m.success('renderer')
+  // }).catch(err => {
+  //   m.error('renderer')
+  //   console.log(`\n  ${errorLog}failed to build renderer process`)
+  //   console.error(`\n${err}\n`)
+  //   process.exit(1)
+  // })
 }
 
 function pack (config) {
